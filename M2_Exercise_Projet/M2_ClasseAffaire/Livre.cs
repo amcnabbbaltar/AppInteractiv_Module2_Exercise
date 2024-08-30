@@ -1,13 +1,13 @@
 using System.Text;
 namespace M2_ClassesAffaire
 {
-    public class Livre
+    public class Livre : IComparable<Livre>
     {
-        // Propriétés
-        public string Titre { get; set; }
-        public string Auteur { get; set; }
-        public string Editeur { get; set; }
-
+        // PropriÃ©tÃ©s
+        public string Titre { get; private set; }
+        public string Auteur { get; private set; }
+        public string Editeur { get; private set; }
+        
         private int _nombreDePages;
         public int NombreDePages
         {
@@ -16,36 +16,43 @@ namespace M2_ClassesAffaire
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentException("Le nombre de pages doit être supérieur à 0.");
+                    throw new ArgumentException("Le nombre de pages doit Ãªtre supÃ©rieur Ã  0.");
                 }
                 _nombreDePages = value;
             }
         }
 
-        public int Annee { get; set; }
+        public int Annee { get; private set; }
 
         // Constructeur
         public Livre(string titre, string auteur, string editeur, int nombreDePages, int annee)
         {
+            if (nombreDePages <= 0)
+            {
+                throw new ArgumentException("Le nombre de pages doit Ãªtre supÃ©rieur Ã  0.");
+            }
+
             Titre = titre;
             Auteur = auteur;
             Editeur = editeur;
-            NombreDePages = nombreDePages; // Utilise le set, donc vérification automatique
+            NombreDePages = nombreDePages;
             Annee = annee;
         }
 
-        // Méthode ToString()
+        // ImplÃ©mentation de la mÃ©thode CompareTo pour trier par titre
+        public int CompareTo(Livre autreLivre)
+        {
+            if (autreLivre == null) return 1;
+            return this.Titre.CompareTo(autreLivre.Titre);
+        }
+
+        // MÃ©thode ToString()
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Titre : {Titre}");
-            sb.AppendLine($"Auteur : {Auteur}");
-            sb.AppendLine($"Éditeur : {Editeur}");
-            sb.AppendLine($"Nombre de pages : {NombreDePages}");
-            sb.AppendLine($"Année : {Annee}");
-            return sb.ToString();
+            return $"Titre : {Titre}, Auteur : {Auteur}, Ã‰diteur : {Editeur}, Nombre de pages : {NombreDePages}, AnnÃ©e : {Annee}";
         }
     }
+
 }
 
 
